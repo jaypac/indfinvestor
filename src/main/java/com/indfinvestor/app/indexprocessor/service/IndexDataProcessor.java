@@ -4,6 +4,7 @@ import com.indfinvestor.app.indexprocessor.model.IndexData;
 import com.indfinvestor.app.indexprocessor.transformer.DatasourceTransformer;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -17,9 +18,9 @@ public class IndexDataProcessor {
         this.rollingReturnProcessor = rollingReturnProcessor;
     }
 
-    public void doExecute(){
+    public void doExecute(File csvFile, String pattern) {
 
-        List<IndexData> historicalIndexData = transformer.transform();
+        List<IndexData> historicalIndexData = transformer.transform(csvFile, pattern);
         rollingReturnProcessor.calculateRollingReturns(historicalIndexData);
 
     }

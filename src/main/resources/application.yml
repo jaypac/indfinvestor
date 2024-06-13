@@ -28,7 +28,7 @@ spring:
     #password: JM8$tek12
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         default_schema: public

@@ -9,8 +9,10 @@ import com.indfinvestor.app.indexprocessor.service.IndexDataProcessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,7 +43,25 @@ public class IndexDataController {
     @GetMapping("/process")
     public String process() {
 
-        indexDataProcessor.doExecute();
+//        var list = List.of("NIFTY 100", "NIFTY ALPHA 50", "NIFTY ALPHA LOW-VOLATILITY 30",
+//                "NIFTY ALPHA QUALITY LOW-VOLATILITY 30", "NIFTY ALPHA QUALITY VALUE LOW-VOLATILITY 30");
+
+//        var list = List.of("NIFTY LARGEMIDCAP 250","NIFTY LOW VOLATILITY 50","NIFTY MIDCAP 50","NIFTY MIDCAP 100",
+//                "NIFTY MIDCAP 150","NIFTY NEXT 50","NIFTY50 VALUE 20","NIFTY100 LOW VOLATILITY 30",
+//                "NIFTY100 QUALITY 30","NIFTY200 ALPHA 30","NIFTY200 MOMENTUM 30","NIFTY200 QUALITY 30",
+//                "NIFTY200 VALUE 30");
+
+        var list = List.of("BSE Low Volatility");
+
+        //String pattern = "dd MMM yyyy";
+        String pattern = "dd-MMM-yy";
+        for (String filename : list) {
+            String fileName = "C:\\Jubin\\temp\\historical_data\\" + filename + ".csv";
+            File csvFile = new File(fileName);
+            indexDataProcessor.doExecute(csvFile, pattern);
+
+        }
+
 
         return "Done...";
 

@@ -81,8 +81,11 @@ public class RollingReturnProcessor {
         var pctValues10year = new ArrayList<Double>();
 
 
+        String indexName = indexDataRecords.stream().findFirst().get().name();
+        LOG.info("Processing Index Data {}", indexName);
+        List<IndexRollingReturns> indexRollingReturnsList = new ArrayList<>();
         indexDataRecords.forEach(indexData -> {
-            LOG.info("indexData {}", indexData);
+            //  LOG.info("indexData {}", indexData);
             var price = new BigDecimal(indexData.close());
 
             IndexRollingReturns indexRollingReturns = new IndexRollingReturns();
@@ -115,8 +118,7 @@ public class RollingReturnProcessor {
                         indexRollingReturns.setOneYearReturn(BigDecimal.ZERO);
                         pctValues1year.add(BigDecimal.ZERO.doubleValue());
                     } else {
-                        LOG.info("1 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        //println("1 ${oneYearDate} oldPrice: ${navDateMap.get(oneYearDate)} currentPrice: ${price.toDouble()}")
+                        // LOG.info("1 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
                         var pct = ((price.doubleValue() - oldPrice.doubleValue()) / price.doubleValue()) * 100;
                         indexRollingReturns.setOneYearReturn(new BigDecimal(pct));
                         pctValues1year.add(pct);
@@ -129,8 +131,7 @@ public class RollingReturnProcessor {
                         indexRollingReturns.setThreeYearReturn(BigDecimal.ZERO);
                         pctValues3year.add(BigDecimal.ZERO.doubleValue());
                     } else {
-                        LOG.info("3 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        //println("3 ${threeYearDate} oldPrice: ${navDateMap.get(threeYearDate)} currentPrice: ${price.toDouble()}")
+                        // LOG.info("3 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
                         var cagr = calculateCagr(price, oldPrice, 3);
                         indexRollingReturns.setThreeYearReturn(cagr);
                         pctValues3year.add(cagr.doubleValue());
@@ -144,8 +145,7 @@ public class RollingReturnProcessor {
                         indexRollingReturns.setFiveYearReturn(BigDecimal.ZERO);
                         pctValues5year.add(BigDecimal.ZERO.doubleValue());
                     } else {
-                        LOG.info("5 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        // println("5 ${fiveYearDate} oldPrice: ${navDateMap.get(fiveYearDate)} currentPrice: ${price.toDouble()}")
+                        //LOG.info("5 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
                         var cagr = calculateCagr(price, oldPrice, 5);
                         indexRollingReturns.setFiveYearReturn(cagr);
                         pctValues5year.add(cagr.doubleValue());
@@ -158,8 +158,7 @@ public class RollingReturnProcessor {
                         indexRollingReturns.setTenYearReturn(BigDecimal.ZERO);
                         pctValues10year.add(BigDecimal.ZERO.doubleValue());
                     } else {
-                        LOG.info("10 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        //println("10 ${tenYearDate} oldPrice: ${navDateMap.get(tenYearDate)} currentPrice: ${price.toDouble()}")
+                        //LOG.info("10 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
                         var cagr = calculateCagr(price, oldPrice, 10);
                         indexRollingReturns.setTenYearReturn(cagr);
                         pctValues10year.add(cagr.doubleValue());
@@ -167,15 +166,17 @@ public class RollingReturnProcessor {
                 }
             }
 
-            indexRollingReturnsRepository.save(indexRollingReturns);
+            indexRollingReturnsList.add(indexRollingReturns);
 
         });
 
+        //indexRollingReturnsRepository.saveAll(indexRollingReturnsList);
 
-        LOG.info("pctValues1year {}", pctValues1year);
-        LOG.info("pctValues3year {}", pctValues3year);
-        LOG.info("pctValues1year {}", pctValues5year);
-        LOG.info("pctValues1year {}", pctValues10year);
+
+//        LOG.info("pctValues1year {}", pctValues1year);
+//        LOG.info("pctValues3year {}", pctValues3year);
+//        LOG.info("pctValues1year {}", pctValues5year);
+//        LOG.info("pctValues1year {}", pctValues10year);
 
         accum1Year.addAll(pctValues1year);
         accum3Year.addAll(pctValues3year);
@@ -184,27 +185,33 @@ public class RollingReturnProcessor {
 
 
         var indexReturnStats = new IndexReturnStats();
-        indexReturnStats.setName("NIFTY 50");
+        indexReturnStats.setName(indexName);
 
         indexReturnStats.setOneYearStd(BigDecimal.valueOf(accum1Year.populationStandardDeviation()));
-        indexReturnStats.setThreeYearStd(BigDecimal.valueOf(accum3Year.populationStandardDeviation()));
-        indexReturnStats.setFiveYearStd(BigDecimal.valueOf(accum5Year.populationStandardDeviation()));
-        indexReturnStats.setTenYearStd(BigDecimal.valueOf(accum10Year.populationStandardDeviation()));
-
         indexReturnStats.setOneYearMean(BigDecimal.valueOf(accum1Year.mean()));
-        indexReturnStats.setThreeYearMean(BigDecimal.valueOf(accum3Year.mean()));
-        indexReturnStats.setFiveYearMean(BigDecimal.valueOf(accum5Year.mean()));
-        indexReturnStats.setTenYearMean(BigDecimal.valueOf(accum10Year.mean()));
-
         indexReturnStats.setOneYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues1year)));
-        indexReturnStats.setThreeYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues3year)));
-        indexReturnStats.setFiveYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues5year)));
-        indexReturnStats.setTenYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues10year)));
-
         indexReturnStats.setOneYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues1year)));
-        indexReturnStats.setThreeYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues3year)));
-        indexReturnStats.setFiveYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues5year)));
-        indexReturnStats.setTenYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues10year)));
+
+        if (!pctValues3year.isEmpty()) {
+            indexReturnStats.setThreeYearStd(BigDecimal.valueOf(accum3Year.populationStandardDeviation()));
+            indexReturnStats.setThreeYearMean(BigDecimal.valueOf(accum3Year.mean()));
+            indexReturnStats.setThreeYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues3year)));
+            indexReturnStats.setThreeYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues3year)));
+        }
+
+        if (!pctValues5year.isEmpty()) {
+            indexReturnStats.setFiveYearStd(BigDecimal.valueOf(accum5Year.populationStandardDeviation()));
+            indexReturnStats.setFiveYearMean(BigDecimal.valueOf(accum5Year.mean()));
+            indexReturnStats.setFiveYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues5year)));
+            indexReturnStats.setFiveYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues5year)));
+        }
+
+        if (!pctValues10year.isEmpty()) {
+            indexReturnStats.setTenYearStd(BigDecimal.valueOf(accum10Year.populationStandardDeviation()));
+            indexReturnStats.setTenYearMean(BigDecimal.valueOf(accum10Year.mean()));
+            indexReturnStats.setTenYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues10year)));
+            indexReturnStats.setTenYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues10year)));
+        }
 
         indexReturnStatsRepository.save(indexReturnStats);
 
