@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class RollingReturnProcessor {
 
-    private Logger LOG = LoggerFactory.getLogger(RollingReturnProcessor.class);
+    private static Logger LOG = LoggerFactory.getLogger(RollingReturnProcessor.class);
 
     private final IndexRollingReturnsRepository indexRollingReturnsRepository;
     private final IndexReturnStatsRepository indexReturnStatsRepository;
@@ -67,13 +67,7 @@ public class RollingReturnProcessor {
      */
     public void calculateRollingReturns(List<IndexData> indexDataRecords) {
 
-
         var navDateMap = indexDataRecords.stream().collect(Collectors.toMap(IndexData::date, IndexData::close));
-
-        var accum1Year = new StatsAccumulator();
-        var accum3Year = new StatsAccumulator();
-        var accum5Year = new StatsAccumulator();
-        var accum10Year = new StatsAccumulator();
 
         var pctValues1year = new ArrayList<Double>();
         var pctValues3year = new ArrayList<Double>();
@@ -172,48 +166,77 @@ public class RollingReturnProcessor {
 
         //indexRollingReturnsRepository.saveAll(indexRollingReturnsList);
 
+        var yearMap = Map.of(1, pctValues1year, 3, pctValues3year, 5, pctValues5year, 10, pctValues10year);
+        for (Map.Entry<Integer, ArrayList<Double>> entry : yearMap.entrySet()) {
 
-//        LOG.info("pctValues1year {}", pctValues1year);
-//        LOG.info("pctValues3year {}", pctValues3year);
-//        LOG.info("pctValues1year {}", pctValues5year);
-//        LOG.info("pctValues1year {}", pctValues10year);
+            var year = entry.getKey();
+            var pctValues = entry.getValue();
 
-        accum1Year.addAll(pctValues1year);
-        accum3Year.addAll(pctValues3year);
-        accum5Year.addAll(pctValues5year);
-        accum10Year.addAll(pctValues10year);
+            var accumYear = new StatsAccumulator();
+
+            if (!pctValues.isEmpty()) {
+
+                accumYear.addAll(pctValues);
+                var indexReturnStats = new IndexReturnStats();
+                indexReturnStats.setName(indexName);
+                indexReturnStats.setYear(Long.valueOf(year));
+                indexReturnStats.setStandardDeviation(BigDecimal.valueOf(accumYear.populationStandardDeviation()));
+                indexReturnStats.setMean(BigDecimal.valueOf(accumYear.mean()));
+                indexReturnStats.setPercentile90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues)));
+                indexReturnStats.setPercentile95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues)));
+                setFrequencyDistribution(indexReturnStats, pctValues);
+                indexReturnStatsRepository.save(indexReturnStats);
+            }
+        }
+    }
+
+    private void setFrequencyDistribution(IndexReturnStats indexReturnStats, ArrayList<Double> pctValues) {
+
+        int negative = 0;
+        int count5 = 0;
+        int count10 = 0;
+        int count15 = 0;
+        int count20 = 0;
+        int count25 = 0;
 
 
-        var indexReturnStats = new IndexReturnStats();
-        indexReturnStats.setName(indexName);
+        for (Double value : pctValues) {
 
-        indexReturnStats.setOneYearStd(BigDecimal.valueOf(accum1Year.populationStandardDeviation()));
-        indexReturnStats.setOneYearMean(BigDecimal.valueOf(accum1Year.mean()));
-        indexReturnStats.setOneYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues1year)));
-        indexReturnStats.setOneYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues1year)));
-
-        if (!pctValues3year.isEmpty()) {
-            indexReturnStats.setThreeYearStd(BigDecimal.valueOf(accum3Year.populationStandardDeviation()));
-            indexReturnStats.setThreeYearMean(BigDecimal.valueOf(accum3Year.mean()));
-            indexReturnStats.setThreeYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues3year)));
-            indexReturnStats.setThreeYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues3year)));
+            if (value < 0) {
+                negative++;
+            } else if (value <= 5) {
+                count5++;
+            } else if (value <= 10) {
+                count10++;
+            } else if (value <= 15) {
+                count15++;
+            } else if (value <= 20) {
+                count20++;
+            } else {
+                count25++;
+            }
         }
 
-        if (!pctValues5year.isEmpty()) {
-            indexReturnStats.setFiveYearStd(BigDecimal.valueOf(accum5Year.populationStandardDeviation()));
-            indexReturnStats.setFiveYearMean(BigDecimal.valueOf(accum5Year.mean()));
-            indexReturnStats.setFiveYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues5year)));
-            indexReturnStats.setFiveYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues5year)));
+        int total = negative + count5 + count10 + count15 + count20 + count25;
+
+        if (total > 0) {
+            indexReturnStats.setNegative(getValue(negative, total));
+            indexReturnStats.setCount5(getValue(count5, total));
+            indexReturnStats.setCount10(getValue(count10, total));
+            indexReturnStats.setCount15(getValue(count15, total));
+            indexReturnStats.setCount20(getValue(count20, total));
+            indexReturnStats.setCount25Plus(getValue(count25, total));
+            indexReturnStats.setTotalCount(BigDecimal.valueOf(total));
         }
+    }
 
-        if (!pctValues10year.isEmpty()) {
-            indexReturnStats.setTenYearStd(BigDecimal.valueOf(accum10Year.populationStandardDeviation()));
-            indexReturnStats.setTenYearMean(BigDecimal.valueOf(accum10Year.mean()));
-            indexReturnStats.setTenYear90(BigDecimal.valueOf(Quantiles.percentiles().index(90).compute(pctValues10year)));
-            indexReturnStats.setTenYear95(BigDecimal.valueOf(Quantiles.percentiles().index(95).compute(pctValues10year)));
-        }
+    private BigDecimal getValue(int count, int total) {
+        BigDecimal countOfEntries = BigDecimal.valueOf(count);
+        BigDecimal totalCount = BigDecimal.valueOf(total);
+        BigDecimal percentage = countOfEntries
+                .divide(totalCount, 4, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal("100"));
 
-        indexReturnStatsRepository.save(indexReturnStats);
-
+        return percentage.setScale(2, RoundingMode.HALF_UP);
     }
 }

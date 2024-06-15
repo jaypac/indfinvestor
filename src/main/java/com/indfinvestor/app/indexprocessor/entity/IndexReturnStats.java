@@ -7,61 +7,49 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "INDEX_RETURN_STATS")
 public class IndexReturnStats {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "1_YEAR_STD", precision = 10, scale = 2)
-    private BigDecimal oneYearStd;
+    @Column(name = "YEAR_NOS", nullable = false)
+    private Long year;
 
-    @Column(name = "1_YEAR_MEAN", precision = 10, scale = 2)
-    private BigDecimal oneYearMean;
+    @Column(name = "STD_DEV", precision = 10, scale = 2)
+    private BigDecimal standardDeviation;
 
-    @Column(name = "1_YEAR_90", precision = 10, scale = 2)
-    private BigDecimal oneYear90;
+    @Column(name = "MEAN", precision = 10, scale = 2)
+    private BigDecimal mean;
 
+    @Column(name = "PERCENTILE_90", precision = 10, scale = 2)
+    private BigDecimal percentile90;
 
-    @Column(name = "1_YEAR_95", precision = 10, scale = 2)
-    private BigDecimal oneYear95;
+    @Column(name = "PERCENTILE_95", precision = 10, scale = 2)
+    private BigDecimal percentile95;
 
-    @Column(name = "3_YEAR_STD", precision = 10, scale = 2)
-    private BigDecimal threeYearStd;
+    @Column(name = "NEGATIVE_COUNT", nullable = false, precision = 10, scale = 2)
+    private BigDecimal negative;
 
-    @Column(name = "3_YEAR_MEAN", precision = 10, scale = 2)
-    private BigDecimal threeYearMean;
+    @Column(name = "COUNT_5", nullable = false, precision = 10, scale = 2)
+    private BigDecimal count5;
 
-    @Column(name = "3_YEAR_90", precision = 10, scale = 2)
-    private BigDecimal threeYear90;
+    @Column(name = "COUNT_10", nullable = false, precision = 10, scale = 2)
+    private BigDecimal count10;
 
-    @Column(name = "3_YEAR_95", precision = 10, scale = 2)
-    private BigDecimal threeYear95;
+    @Column(name = "COUNT_15", nullable = false, precision = 10, scale = 2)
+    private BigDecimal count15;
 
-    @Column(name = "5_YEAR_STD", precision = 10, scale = 2)
-    private BigDecimal fiveYearStd;
+    @Column(name = "COUNT_20", nullable = false, precision = 10, scale = 2)
+    private BigDecimal count20;
 
-    @Column(name = "5_YEAR_MEAN", precision = 10, scale = 2)
-    private BigDecimal fiveYearMean;
+    @Column(name = "COUNT_25", nullable = false, precision = 10, scale = 2)
+    private BigDecimal count25Plus;
 
-    @Column(name = "5_YEAR_90", precision = 10, scale = 2)
-    private BigDecimal fiveYear90;
-    @Column(name = "5_YEAR_95", precision = 10, scale = 2)
-    private BigDecimal fiveYear95;
-
-    @Column(name = "10_YEAR_STD", precision = 10, scale = 2)
-    private BigDecimal tenYearStd;
-
-    @Column(name = "10_YEAR_MEAN", precision = 10, scale = 2)
-    private BigDecimal tenYearMean;
-
-    @Column(name = "10_YEAR_90", precision = 10, scale = 2)
-    private BigDecimal tenYear90;
-
-    @Column(name = "10_YEAR_95", precision = 10, scale = 2)
-    private BigDecimal tenYear95;
-
+    @Column(name = "TOTAL_COUNT", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalCount;
 
     public Long getId() {
         return id;
@@ -79,131 +67,100 @@ public class IndexReturnStats {
         this.name = name;
     }
 
-    public BigDecimal getOneYearStd() {
-        return oneYearStd;
+    public Long getYear() {
+        return year;
     }
 
-    public void setOneYearStd(BigDecimal oneYearStd) {
-        this.oneYearStd = oneYearStd;
+    public void setYear(Long year) {
+        this.year = year;
     }
 
-    public BigDecimal getOneYearMean() {
-        return oneYearMean;
+    public BigDecimal getStandardDeviation() {
+        return standardDeviation;
     }
 
-    public void setOneYearMean(BigDecimal oneYearMean) {
-        this.oneYearMean = oneYearMean;
+    public void setStandardDeviation(BigDecimal standardDeviation) {
+        this.standardDeviation = standardDeviation;
     }
 
-    public BigDecimal getOneYear90() {
-        return oneYear90;
+    public BigDecimal getMean() {
+        return mean;
     }
 
-    public void setOneYear90(BigDecimal oneYear90) {
-        this.oneYear90 = oneYear90;
+    public void setMean(BigDecimal mean) {
+        this.mean = mean;
     }
 
-    public BigDecimal getOneYear95() {
-        return oneYear95;
+    public BigDecimal getPercentile90() {
+        return percentile90;
     }
 
-    public void setOneYear95(BigDecimal oneYear95) {
-        this.oneYear95 = oneYear95;
+    public void setPercentile90(BigDecimal percentile90) {
+        this.percentile90 = percentile90;
     }
 
-    public BigDecimal getThreeYearStd() {
-        return threeYearStd;
+    public BigDecimal getPercentile95() {
+        return percentile95;
     }
 
-    public void setThreeYearStd(BigDecimal threeYearStd) {
-        this.threeYearStd = threeYearStd;
+    public void setPercentile95(BigDecimal percentile95) {
+        this.percentile95 = percentile95;
     }
 
-    public BigDecimal getThreeYearMean() {
-        return threeYearMean;
+    public BigDecimal getNegative() {
+        return negative;
     }
 
-    public void setThreeYearMean(BigDecimal threeYearMean) {
-        this.threeYearMean = threeYearMean;
+    public void setNegative(BigDecimal negative) {
+        this.negative = negative;
     }
 
-    public BigDecimal getThreeYear90() {
-        return threeYear90;
+    public BigDecimal getCount5() {
+        return count5;
     }
 
-    public void setThreeYear90(BigDecimal threeYear90) {
-        this.threeYear90 = threeYear90;
+    public void setCount5(BigDecimal count5) {
+        this.count5 = count5;
     }
 
-    public BigDecimal getThreeYear95() {
-        return threeYear95;
+    public BigDecimal getCount10() {
+        return count10;
     }
 
-    public void setThreeYear95(BigDecimal threeYear95) {
-        this.threeYear95 = threeYear95;
+    public void setCount10(BigDecimal count10) {
+        this.count10 = count10;
     }
 
-    public BigDecimal getFiveYearStd() {
-        return fiveYearStd;
+    public BigDecimal getCount15() {
+        return count15;
     }
 
-    public void setFiveYearStd(BigDecimal fiveYearStd) {
-        this.fiveYearStd = fiveYearStd;
+    public void setCount15(BigDecimal count15) {
+        this.count15 = count15;
     }
 
-    public BigDecimal getFiveYearMean() {
-        return fiveYearMean;
+    public BigDecimal getCount20() {
+        return count20;
     }
 
-    public void setFiveYearMean(BigDecimal fiveYearMean) {
-        this.fiveYearMean = fiveYearMean;
+    public void setCount20(BigDecimal count20) {
+        this.count20 = count20;
     }
 
-    public BigDecimal getFiveYear90() {
-        return fiveYear90;
+    public BigDecimal getCount25Plus() {
+        return count25Plus;
     }
 
-    public void setFiveYear90(BigDecimal fiveYear90) {
-        this.fiveYear90 = fiveYear90;
+    public void setCount25Plus(BigDecimal count25Plus) {
+        this.count25Plus = count25Plus;
     }
 
-    public BigDecimal getFiveYear95() {
-        return fiveYear95;
+    public BigDecimal getTotalCount() {
+        return totalCount;
     }
 
-    public void setFiveYear95(BigDecimal fiveYear95) {
-        this.fiveYear95 = fiveYear95;
-    }
-
-    public BigDecimal getTenYearStd() {
-        return tenYearStd;
-    }
-
-    public void setTenYearStd(BigDecimal tenYearStd) {
-        this.tenYearStd = tenYearStd;
-    }
-
-    public BigDecimal getTenYearMean() {
-        return tenYearMean;
-    }
-
-    public void setTenYearMean(BigDecimal tenYearMean) {
-        this.tenYearMean = tenYearMean;
-    }
-
-    public BigDecimal getTenYear90() {
-        return tenYear90;
-    }
-
-    public void setTenYear90(BigDecimal tenYear90) {
-        this.tenYear90 = tenYear90;
-    }
-
-    public BigDecimal getTenYear95() {
-        return tenYear95;
-    }
-
-    public void setTenYear95(BigDecimal tenYear95) {
-        this.tenYear95 = tenYear95;
+    public void setTotalCount(BigDecimal totalCount) {
+        this.totalCount = totalCount;
     }
 }
+

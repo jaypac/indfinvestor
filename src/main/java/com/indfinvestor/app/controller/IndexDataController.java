@@ -43,18 +43,17 @@ public class IndexDataController {
     @GetMapping("/process")
     public String process() {
 
-//        var list = List.of("NIFTY 100", "NIFTY ALPHA 50", "NIFTY ALPHA LOW-VOLATILITY 30",
-//                "NIFTY ALPHA QUALITY LOW-VOLATILITY 30", "NIFTY ALPHA QUALITY VALUE LOW-VOLATILITY 30");
+        var list = List.of("NIFTY 50", "NIFTY 100", "NIFTY ALPHA 50", "NIFTY ALPHA LOW-VOLATILITY 30",
+                "NIFTY ALPHA QUALITY LOW-VOLATILITY 30", "NIFTY ALPHA QUALITY VALUE LOW-VOLATILITY 30",
+                "NIFTY LARGEMIDCAP 250", "NIFTY LOW VOLATILITY 50", "NIFTY MIDCAP 50", "NIFTY MIDCAP 100",
+                "NIFTY MIDCAP 150", "NIFTY NEXT 50", "NIFTY50 VALUE 20", "NIFTY100 LOW VOLATILITY 30",
+                "NIFTY100 QUALITY 30", "NIFTY200 ALPHA 30", "NIFTY200 MOMENTUM 30", "NIFTY200 QUALITY 30",
+                "NIFTY200 VALUE 30");
+        String pattern = "dd MMM yyyy";
 
-//        var list = List.of("NIFTY LARGEMIDCAP 250","NIFTY LOW VOLATILITY 50","NIFTY MIDCAP 50","NIFTY MIDCAP 100",
-//                "NIFTY MIDCAP 150","NIFTY NEXT 50","NIFTY50 VALUE 20","NIFTY100 LOW VOLATILITY 30",
-//                "NIFTY100 QUALITY 30","NIFTY200 ALPHA 30","NIFTY200 MOMENTUM 30","NIFTY200 QUALITY 30",
-//                "NIFTY200 VALUE 30");
+/*        var list = List.of("BSE Low Volatility");
+        String pattern = "dd-MMM-yy";*/
 
-        var list = List.of("BSE Low Volatility");
-
-        //String pattern = "dd MMM yyyy";
-        String pattern = "dd-MMM-yy";
         for (String filename : list) {
             String fileName = "C:\\Jubin\\temp\\historical_data\\" + filename + ".csv";
             File csvFile = new File(fileName);
@@ -62,8 +61,6 @@ public class IndexDataController {
 
         }
 
-
         return "Done...";
-
     }
 }
