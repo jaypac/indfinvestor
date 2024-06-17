@@ -6,6 +6,7 @@ import com.indfinvestor.app.indexdata.IndexDataRetriever;
 import com.indfinvestor.app.indexdata.sink.SinkType;
 import com.indfinvestor.app.indexdata.source.IndexSourceType;
 import com.indfinvestor.app.indexprocessor.service.IndexDataProcessor;
+import com.indfinvestor.app.navprocessor.service.NavDataProcessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +21,12 @@ public class IndexDataController {
 
     private final IndexDataRetriever indexDataRetriever;
     private final IndexDataProcessor indexDataProcessor;
+    private final NavDataProcessor navDataProcessor;
 
-    public IndexDataController(IndexDataRetriever indexDataRetriever, IndexDataProcessor indexDataProcessor) {
+    public IndexDataController(IndexDataRetriever indexDataRetriever, IndexDataProcessor indexDataProcessor, NavDataProcessor navDataProcessor) {
         this.indexDataRetriever = indexDataRetriever;
         this.indexDataProcessor = indexDataProcessor;
+        this.navDataProcessor = navDataProcessor;
     }
 
     @GetMapping("/get")
@@ -40,8 +43,8 @@ public class IndexDataController {
 
     }
 
-    @GetMapping("/process")
-    public String process() {
+    @GetMapping("/process-index")
+    public String processIndex() {
 
         var list = List.of("NIFTY 100", "NIFTY 200", "NIFTY 50", "NIFTY 500", "NIFTY ALPHA 50",
                 "NIFTY ALPHA LOW-VOLATILITY 30", "NIFTY ALPHA QUALITY LOW-VOLATILITY 30",
@@ -63,7 +66,23 @@ public class IndexDataController {
             String fileName = "C:\\Jubin\\temp\\historical_data\\" + filename + ".csv";
             File csvFile = new File(fileName);
             indexDataProcessor.doExecute(csvFile, pattern);
+        }
 
+        return "Done...";
+    }
+
+    @GetMapping("/process-nav")
+    public String processNav() {
+
+        var list = List.of("ABSL","Axis","Canara Robeco","Edelweiss","HDFC",
+                "ICICI","Kotak","Mirae Asset","Motilal Oswal","Navi","Nippon","PPFAS","Quant","SBI","UTI");
+
+//        var list = List.of("Mirae Asset");
+
+        for (String filename : list) {
+            String fileName = "C:\\Jubin\\temp\\nav_data\\" + filename + ".txt";
+            File csvFile = new File(fileName);
+            navDataProcessor.doExecute(csvFile);
         }
 
         return "Done...";

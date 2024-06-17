@@ -11,17 +11,17 @@ import java.util.List;
 public class IndexDataProcessor {
 
     private final DatasourceTransformer transformer;
-    private final RollingReturnProcessor rollingReturnProcessor;
+    private final IndexRollingReturnProcessor indexRollingReturnProcessor;
 
-    public IndexDataProcessor(DatasourceTransformer transformer, RollingReturnProcessor rollingReturnProcessor) {
+    public IndexDataProcessor(DatasourceTransformer transformer, IndexRollingReturnProcessor indexRollingReturnProcessor) {
         this.transformer = transformer;
-        this.rollingReturnProcessor = rollingReturnProcessor;
+        this.indexRollingReturnProcessor = indexRollingReturnProcessor;
     }
 
     public void doExecute(File csvFile, String pattern) {
 
         List<IndexData> historicalIndexData = transformer.transform(csvFile, pattern);
-        rollingReturnProcessor.calculateRollingReturns(historicalIndexData);
+        indexRollingReturnProcessor.calculateRollingReturns(historicalIndexData);
 
     }
 }

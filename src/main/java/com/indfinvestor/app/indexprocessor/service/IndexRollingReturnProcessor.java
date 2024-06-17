@@ -21,14 +21,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class RollingReturnProcessor {
+public class IndexRollingReturnProcessor {
 
-    private static Logger LOG = LoggerFactory.getLogger(RollingReturnProcessor.class);
+    private static Logger LOG = LoggerFactory.getLogger(IndexRollingReturnProcessor.class);
 
     private final IndexRollingReturnsRepository indexRollingReturnsRepository;
     private final IndexReturnStatsRepository indexReturnStatsRepository;
 
-    public RollingReturnProcessor(IndexRollingReturnsRepository indexRollingReturnsRepository, IndexReturnStatsRepository indexReturnStatsRepository) {
+    public IndexRollingReturnProcessor(IndexRollingReturnsRepository indexRollingReturnsRepository, IndexReturnStatsRepository indexReturnStatsRepository) {
         this.indexRollingReturnsRepository = indexRollingReturnsRepository;
         this.indexReturnStatsRepository = indexReturnStatsRepository;
     }
