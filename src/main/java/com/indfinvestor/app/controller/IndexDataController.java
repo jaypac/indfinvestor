@@ -31,8 +31,8 @@ public class IndexDataController {
 
         String uuid = UUID.randomUUID().toString();
         var fromDate = LocalDate.of(1990, Month.JANUARY, 1);
-        var toDate = LocalDate.of(2024, Month.MAY, 31);
-        var indexFetchParams = new IndexDataFetchParams(uuid, "NIFTY 50", IndexSourceType.YAHOO, SinkType.FILE, fromDate, toDate);
+        var toDate = LocalDate.of(2024, Month.JUNE, 14);
+        var indexFetchParams = new IndexDataFetchParams(uuid, "NIFTY 50", IndexSourceType.NSE, SinkType.FILE, fromDate, toDate);
 
         indexDataRetriever.process(indexFetchParams);
 
@@ -43,12 +43,17 @@ public class IndexDataController {
     @GetMapping("/process")
     public String process() {
 
-        var list = List.of("NIFTY 50", "NIFTY 100", "NIFTY ALPHA 50", "NIFTY ALPHA LOW-VOLATILITY 30",
-                "NIFTY ALPHA QUALITY LOW-VOLATILITY 30", "NIFTY ALPHA QUALITY VALUE LOW-VOLATILITY 30",
-                "NIFTY LARGEMIDCAP 250", "NIFTY LOW VOLATILITY 50", "NIFTY MIDCAP 50", "NIFTY MIDCAP 100",
-                "NIFTY MIDCAP 150", "NIFTY NEXT 50", "NIFTY50 VALUE 20", "NIFTY100 LOW VOLATILITY 30",
-                "NIFTY100 QUALITY 30", "NIFTY200 ALPHA 30", "NIFTY200 MOMENTUM 30", "NIFTY200 QUALITY 30",
-                "NIFTY200 VALUE 30");
+        var list = List.of("NIFTY 100", "NIFTY 200", "NIFTY 50", "NIFTY 500", "NIFTY ALPHA 50",
+                "NIFTY ALPHA LOW-VOLATILITY 30", "NIFTY ALPHA QUALITY LOW-VOLATILITY 30",
+                "NIFTY ALPHA QUALITY VALUE LOW-VOLATILITY 30", "NIFTY BANK", "NIFTY CONSUMER DURABLES",
+                "NIFTY DIVIDEND OPPORTUNITIES 50", "NIFTY HEALTHCARE", "NIFTY IT", "NIFTY LARGEMIDCAP 250",
+                "NIFTY LOW VOLATILITY 50", "NIFTY MICROCAP 250", "NIFTY MIDCAP 100", "NIFTY MIDCAP 150",
+                "NIFTY MIDCAP 50", "NIFTY MIDCAP150 MOMENTUM 50", "NIFTY NEXT 50", "NIFTY OIL & GAS",
+                "NIFTY PRIVATE BANK", "NIFTY PSU BANK", "NIFTY SMALLCAP 250", "NIFTY SMALLCAP 50",
+                "NIFTY SMALLCAP250 MOMENTUM QUALITY 100", "NIFTY SMALLCAP250 QUALITY 50", "NIFTY TOTAL MARKET",
+                "NIFTY100 EQUAL WEIGHT", "NIFTY100 LOW VOLATILITY 30", "NIFTY100 QUALITY 30", "NIFTY200 ALPHA 30",
+                "NIFTY200 MOMENTUM 30", "NIFTY200 QUALITY 30", "NIFTY200 VALUE 30", "NIFTY50 EQUAL WEIGHT",
+                "NIFTY50 VALUE 20", "NIFTY500 VALUE 50");
         String pattern = "dd MMM yyyy";
 
 /*        var list = List.of("BSE Low Volatility");

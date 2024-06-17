@@ -37,13 +37,14 @@ public class NSEIndexDatasource implements IndexDataSource {
         var startDate = params.from().format(formatter);
         var endDate = params.to().format(formatter);
 
-        var requestParams = Map.of("name", params.indexName(), "startDate", startDate, "endDate", endDate);
-        ObjectMapper mapper = new ObjectMapper();
+        var mapper = new ObjectMapper();
         try {
-            String content = mapper.writeValueAsString(requestParams);
+            var requestSubParams = Map.of("name", params.indexName(), "startDate", startDate, "endDate", endDate, "indexName",params.indexName());
+            var requestParams = Map.of("cinfo", mapper.writeValueAsString(requestSubParams));
+            var content = mapper.writeValueAsString(requestParams);
             //String content = "{\"name\":\"NIFTY 50\",\"startDate\":\"01-Jan-1990\",\"endDate\":\"31-Dec-2023\"}";
 
-            RestClient customClient = RestClient.builder()
+            var customClient = RestClient.builder()
                     .requestFactory(clientHttpRequestFactory())
                     .build();
 
@@ -60,8 +61,6 @@ public class NSEIndexDatasource implements IndexDataSource {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
 

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "IndexInfo")
+@Entity
 @Table(name = "INDEX_INFO")
 public class IndexInfo {
 
