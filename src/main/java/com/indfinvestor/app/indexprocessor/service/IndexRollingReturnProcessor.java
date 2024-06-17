@@ -16,6 +16,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -69,12 +70,11 @@ public class IndexRollingReturnProcessor {
 
         var navDateMap = indexDataRecords.stream().collect(Collectors.toMap(IndexData::date, IndexData::close));
 
-        var pctValues1year = new ArrayList<Double>();
-        var pctValues3year = new ArrayList<Double>();
-        var pctValues5year = new ArrayList<Double>();
-        var pctValues10year = new ArrayList<Double>();
-
-
+        var yearMap = new HashMap<Integer, List<Double>>();
+        int maxCountOfYears = 10;
+        for (int i = 1; i <= maxCountOfYears; i++) {
+            yearMap.put(i, new ArrayList<>());
+        }
         String indexName = indexDataRecords.stream().findFirst().get().name();
         LOG.info("Processing Index Data {}", indexName);
         List<IndexRollingReturns> indexRollingReturnsList = new ArrayList<>();
@@ -82,92 +82,43 @@ public class IndexRollingReturnProcessor {
             //  LOG.info("indexData {}", indexData);
             var price = new BigDecimal(indexData.close());
 
-            IndexRollingReturns indexRollingReturns = new IndexRollingReturns();
-            indexRollingReturns.setName(indexData.name());
-            indexRollingReturns.setDate(indexData.date());
+            for (int yearCount = 1; yearCount <= maxCountOfYears; yearCount++) {
+                IndexRollingReturns indexRollingReturns = new IndexRollingReturns();
+                indexRollingReturns.setName(indexData.name());
+                indexRollingReturns.setDate(indexData.date());
+                indexRollingReturns.setYear((long) yearCount);
 
-            if (price.compareTo(BigDecimal.ZERO) == 0) {
-                indexRollingReturns.setOneYearReturn(BigDecimal.ZERO);
-                pctValues1year.add(BigDecimal.ZERO.doubleValue());
-
-                indexRollingReturns.setThreeYearReturn(BigDecimal.ZERO);
-                pctValues3year.add(BigDecimal.ZERO.doubleValue());
-
-                indexRollingReturns.setFiveYearReturn(BigDecimal.ZERO);
-                pctValues5year.add(BigDecimal.ZERO.doubleValue());
-
-                indexRollingReturns.setTenYearReturn(BigDecimal.ZERO);
-                pctValues10year.add(BigDecimal.ZERO.doubleValue());
-            } else {
-                var navDate = indexData.date();
-
-                var oneYearDate = localDate(navDate, navDateMap, 1L);
-                var threeYearDate = localDate(navDate, navDateMap, 3L);
-                var fiveYearDate = localDate(navDate, navDateMap, 5L);
-                var tenYearDate = localDate(navDate, navDateMap, 10L);
-
-                if (navDateMap.containsKey(oneYearDate)) {
-                    var oldPrice = new BigDecimal(navDateMap.get(oneYearDate));
-                    if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
-                        indexRollingReturns.setOneYearReturn(BigDecimal.ZERO);
-                        pctValues1year.add(BigDecimal.ZERO.doubleValue());
-                    } else {
-                        // LOG.info("1 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        var pct = ((price.doubleValue() - oldPrice.doubleValue()) / price.doubleValue()) * 100;
-                        indexRollingReturns.setOneYearReturn(new BigDecimal(pct));
-                        pctValues1year.add(pct);
+                List<Double> pctValues = yearMap.get(yearCount);
+                if (price.compareTo(BigDecimal.ZERO) == 0) {
+                    indexRollingReturns.setCagrReturn(BigDecimal.ZERO);
+                    pctValues.add(BigDecimal.ZERO.doubleValue());
+                } else {
+                    var navDate = indexData.date();
+                    var previousNavDate = localDate(navDate, navDateMap, (long) yearCount);
+                    if (navDateMap.containsKey(previousNavDate)) {
+                        var oldPrice = new BigDecimal(navDateMap.get(previousNavDate));
+                        if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
+                            indexRollingReturns.setCagrReturn(BigDecimal.ZERO);
+                            pctValues.add(BigDecimal.ZERO.doubleValue());
+                        } else {
+                            // LOG.info("1 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
+                            var pct = ((price.doubleValue() - oldPrice.doubleValue()) / price.doubleValue()) * 100;
+                            var cagr = new BigDecimal(pct);
+                            if (yearCount > 1) {
+                                cagr = calculateCagr(price, oldPrice, yearCount);
+                            }
+                            indexRollingReturns.setCagrReturn(cagr);
+                            pctValues.add(cagr.doubleValue());
+                        }
                     }
                 }
-
-                if (navDateMap.containsKey(threeYearDate)) {
-                    var oldPrice = new BigDecimal(navDateMap.get(threeYearDate));
-                    if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
-                        indexRollingReturns.setThreeYearReturn(BigDecimal.ZERO);
-                        pctValues3year.add(BigDecimal.ZERO.doubleValue());
-                    } else {
-                        // LOG.info("3 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        var cagr = calculateCagr(price, oldPrice, 3);
-                        indexRollingReturns.setThreeYearReturn(cagr);
-                        pctValues3year.add(cagr.doubleValue());
-                    }
-                }
-
-                if (navDateMap.containsKey(fiveYearDate)) {
-                    var oldPrice = new BigDecimal(navDateMap.get(fiveYearDate));
-                    if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
-
-                        indexRollingReturns.setFiveYearReturn(BigDecimal.ZERO);
-                        pctValues5year.add(BigDecimal.ZERO.doubleValue());
-                    } else {
-                        //LOG.info("5 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        var cagr = calculateCagr(price, oldPrice, 5);
-                        indexRollingReturns.setFiveYearReturn(cagr);
-                        pctValues5year.add(cagr.doubleValue());
-                    }
-                }
-
-                if (navDateMap.containsKey(tenYearDate)) {
-                    var oldPrice = new BigDecimal(navDateMap.get(tenYearDate));
-                    if (oldPrice.compareTo(BigDecimal.ZERO) == 0) {
-                        indexRollingReturns.setTenYearReturn(BigDecimal.ZERO);
-                        pctValues10year.add(BigDecimal.ZERO.doubleValue());
-                    } else {
-                        //LOG.info("10 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
-                        var cagr = calculateCagr(price, oldPrice, 10);
-                        indexRollingReturns.setTenYearReturn(cagr);
-                        pctValues10year.add(cagr.doubleValue());
-                    }
-                }
+                indexRollingReturnsList.add(indexRollingReturns);
             }
-
-            indexRollingReturnsList.add(indexRollingReturns);
-
         });
 
         //indexRollingReturnsRepository.saveAll(indexRollingReturnsList);
 
-        var yearMap = Map.of(1, pctValues1year, 3, pctValues3year, 5, pctValues5year, 10, pctValues10year);
-        for (Map.Entry<Integer, ArrayList<Double>> entry : yearMap.entrySet()) {
+        for (Map.Entry<Integer, List<Double>> entry : yearMap.entrySet()) {
 
             var year = entry.getKey();
             var pctValues = entry.getValue();
@@ -190,7 +141,7 @@ public class IndexRollingReturnProcessor {
         }
     }
 
-    private void setFrequencyDistribution(IndexReturnStats indexReturnStats, ArrayList<Double> pctValues) {
+    private void setFrequencyDistribution(IndexReturnStats indexReturnStats, List<Double> pctValues) {
 
         int negative = 0;
         int count5 = 0;

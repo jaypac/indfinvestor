@@ -19,17 +19,11 @@ public class MfRollingReturns {
     @Column(name = "SCHEME_CODE", nullable = false)
     private String schemeCode;
 
-    @Column(name = "1_YEAR_RETURN", precision = 10, scale = 2)
-    private BigDecimal oneYearReturn;
+    @Column(name = "YEAR_NOS", nullable = false)
+    private Long year;
 
-    @Column(name = "3_YEAR_RETURN", precision = 10, scale = 2)
-    private BigDecimal threeYearReturn;
-
-    @Column(name = "5_YEAR_RETURN", precision = 10, scale = 2)
-    private BigDecimal fiveYearReturn;
-
-    @Column(name = "10_YEAR_RETURN", precision = 10, scale = 2)
-    private BigDecimal tenYearReturn;
+    @Column(name = "CAGR_RETURN", precision = 10, scale = 2)
+    private BigDecimal cagrReturn;
 
     @Column(name = "DATE", nullable = false)
     private LocalDate date;
@@ -46,48 +40,8 @@ public class MfRollingReturns {
         return schemeName;
     }
 
-    public void setSchemeName(String name) {
-        this.schemeName = name;
-    }
-
-    public BigDecimal getOneYearReturn() {
-        return oneYearReturn;
-    }
-
-    public void setOneYearReturn(BigDecimal oneYearReturn) {
-        this.oneYearReturn = oneYearReturn;
-    }
-
-    public BigDecimal getThreeYearReturn() {
-        return threeYearReturn;
-    }
-
-    public void setThreeYearReturn(BigDecimal threeYearReturn) {
-        this.threeYearReturn = threeYearReturn;
-    }
-
-    public BigDecimal getFiveYearReturn() {
-        return fiveYearReturn;
-    }
-
-    public void setFiveYearReturn(BigDecimal fiveYearReturn) {
-        this.fiveYearReturn = fiveYearReturn;
-    }
-
-    public BigDecimal getTenYearReturn() {
-        return tenYearReturn;
-    }
-
-    public void setTenYearReturn(BigDecimal tenYearReturn) {
-        this.tenYearReturn = tenYearReturn;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setSchemeName(String schemeName) {
+        this.schemeName = schemeName;
     }
 
     public String getSchemeCode() {
@@ -96,5 +50,29 @@ public class MfRollingReturns {
 
     public void setSchemeCode(String schemeCode) {
         this.schemeCode = schemeCode;
+    }
+
+    public Long getYear() {
+        return year;
+    }
+
+    public void setYear(Long year) {
+        this.year = year;
+    }
+
+    public BigDecimal getCagrReturn() {
+        return cagrReturn;
+    }
+
+    public void setCagrReturn(BigDecimal cagrReturn) {
+        this.cagrReturn = cagrReturn;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
