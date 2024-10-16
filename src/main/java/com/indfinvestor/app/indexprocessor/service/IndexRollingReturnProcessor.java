@@ -101,7 +101,7 @@ public class IndexRollingReturnProcessor {
                             indexRollingReturns.setCagrReturn(BigDecimal.ZERO);
                             pctValues.add(BigDecimal.ZERO.doubleValue());
                         } else {
-                            // LOG.info("1 {} oldPrice: {} currentPrice: {}", oneYearDate, oldPrice, price.doubleValue());
+                             LOG.debug("yearCount {} oldPrice: {} currentPrice: {}", yearCount, oldPrice, price.doubleValue());
                             var pct = ((price.doubleValue() - oldPrice.doubleValue()) / price.doubleValue()) * 100;
                             var cagr = new BigDecimal(pct);
                             if (yearCount > 1) {

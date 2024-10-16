@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public record IndexDataFetchParams(
         String uuid,
+        String tradingName,
         String indexName,
         IndexSourceType indexSourceType,
         SinkType sinkType,

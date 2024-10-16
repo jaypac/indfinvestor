@@ -73,7 +73,9 @@ public class MfRollingReturnProcessor {
 
             LOG.info("Calculating Rolling Returns for {}", schemeName);
 
-            var navDateMap = navHistory.stream().collect(Collectors.toMap(MfNavRecord::getDate, MfNavRecord::getNav));
+            var navDateMap = navHistory.stream()
+                    .filter(it -> !it.getSchemeCode().equalsIgnoreCase("118857"))
+                    .collect(Collectors.toMap(MfNavRecord::getDate, MfNavRecord::getNav));
 
             var yearMap = new HashMap<Integer, List<Double>>();
             int maxCountOfYears = 10;

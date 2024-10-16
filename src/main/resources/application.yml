@@ -9,11 +9,10 @@ app:
 logging:
   level:
     org:
-      atmosphere: warn
       apache:
         hc:
           client5:
-            http: debug
+            http: info
 
 spring:
   mvc:
