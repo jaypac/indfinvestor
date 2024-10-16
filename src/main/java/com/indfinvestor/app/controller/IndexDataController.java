@@ -149,7 +149,7 @@ public class IndexDataController {
         String pattern = "dd-MMM-yy";*/
 
         for (String filename : list2) {
-            String fileName = "C:\\Jubin\\temp\\historical_data\\16-10-2024\\index" + filename + ".csv";
+            String fileName = "C:\\Jubin\\temp\\historical_data\\16-10-2024\\index\\" + filename + ".csv";
             File csvFile = new File(fileName);
             indexDataProcessor.doExecute(csvFile, pattern);
         }
