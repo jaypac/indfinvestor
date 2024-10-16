@@ -7,6 +7,7 @@ import com.indfinvestor.app.indexprocessor.entity.IndexRollingReturns;
 import com.indfinvestor.app.indexprocessor.model.IndexData;
 import com.indfinvestor.app.indexprocessor.repository.IndexReturnStatsRepository;
 import com.indfinvestor.app.indexprocessor.repository.IndexRollingReturnsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class IndexRollingReturnProcessor {
 
@@ -68,7 +70,14 @@ public class IndexRollingReturnProcessor {
      */
     public void calculateRollingReturns(List<IndexData> indexDataRecords) {
 
-        var navDateMap = indexDataRecords.stream().collect(Collectors.toMap(IndexData::date, IndexData::close));
+        var navDateMap = new HashMap<LocalDate, String>();
+        for (var record : indexDataRecords) {
+            if (navDateMap.containsKey(record.date())) {
+                log.error("Duplicate entry found for name:{} date:{} ", record.name(), record.date());
+            } else {
+                navDateMap.put(record.date(), record.close());
+            }
+        }
 
         var yearMap = new HashMap<Integer, List<Double>>();
         int maxCountOfYears = 10;
@@ -101,7 +110,7 @@ public class IndexRollingReturnProcessor {
                             indexRollingReturns.setCagrReturn(BigDecimal.ZERO);
                             pctValues.add(BigDecimal.ZERO.doubleValue());
                         } else {
-                             LOG.debug("yearCount {} oldPrice: {} currentPrice: {}", yearCount, oldPrice, price.doubleValue());
+                            LOG.debug("yearCount {} oldPrice: {} currentPrice: {}", yearCount, oldPrice, price.doubleValue());
                             var pct = ((price.doubleValue() - oldPrice.doubleValue()) / price.doubleValue()) * 100;
                             var cagr = new BigDecimal(pct);
                             if (yearCount > 1) {

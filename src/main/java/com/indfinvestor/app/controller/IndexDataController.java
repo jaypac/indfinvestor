@@ -9,6 +9,7 @@ import com.indfinvestor.app.indexdata.sink.SinkType;
 import com.indfinvestor.app.indexdata.source.IndexSourceType;
 import com.indfinvestor.app.indexprocessor.service.IndexDataProcessor;
 import com.indfinvestor.app.navprocessor.service.NavDataProcessor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 public class IndexDataController {
 
@@ -149,9 +151,15 @@ public class IndexDataController {
         String pattern = "dd-MMM-yy";*/
 
         for (String filename : list2) {
+            log.info("Process Index File : {}", filename);
             String fileName = "C:\\Jubin\\temp\\historical_data\\16-10-2024\\index\\" + filename + ".csv";
             File csvFile = new File(fileName);
-            indexDataProcessor.doExecute(csvFile, pattern);
+            if (csvFile.exists()) {
+                indexDataProcessor.doExecute(csvFile, pattern);
+            } else {
+                log.error("Unable to find file : {}", fileName);
+            }
+
         }
 
         return "Done...";
