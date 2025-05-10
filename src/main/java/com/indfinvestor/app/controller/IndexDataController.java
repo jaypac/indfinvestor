@@ -168,13 +168,14 @@ public class IndexDataController {
     @GetMapping("/process-nav")
     public String processNav() {
 
-        var list = List.of("ABSL", "Axis", "Benchmark", "Canara Robeco", "Edelweiss", "HDFC",
-                "ICICI", "Kotak", "Mirae Asset", "Motilal Oswal", "Navi", "Nippon", "PPFAS", "Quant", "SBI", "UTI");
+        var list = List.of("ABSL.txt", "Axis.txt", "Benchmark.txt", "Canara Robeco.txt", "Edelweiss.txt", "HDFC.txt",
+                "ICICI.txt", "Kotak.txt", "Mirae.txt", "Motilal Oswal.txt",
+                "Navi.txt", "Nippon.txt", "PPFAS.txt", "Quant.txt", "SBI.txt", "UTI.txt", "White OAK.txt", "Zerodha.txt");
 
 //        var list = List.of("Mirae Asset");
 
         for (String filename : list) {
-            String fileName = "C:\\Jubin\\temp\\nav_data\\" + filename + ".txt";
+            String fileName = "C:\\Jubin\\temp\\nav_data\\" + filename;
             File csvFile = new File(fileName);
             navDataProcessor.doExecute(csvFile);
         }

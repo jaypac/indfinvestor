@@ -2,6 +2,7 @@ package com.indfinvestor.app.navprocessor.service;
 
 import com.indfinvestor.app.navprocessor.model.MfNavRecord;
 import com.indfinvestor.app.navprocessor.transformer.DatasourceTransformer;
+import jakarta.transaction.Transactional;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class NavDataProcessor {
 
     private final DatasourceTransformer transformer;

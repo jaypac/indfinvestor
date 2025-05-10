@@ -1,18 +1,21 @@
 app:
   index:
+    config: classpath:/indexdata/indexMapping.csv
     sink:
       file:
         folderPath: "C:/Jubin/temp/indexdata"
 
-
-
 logging:
   level:
     org:
+      springframework : info
       apache:
         hc:
           client5:
-            http: info
+            http: trace
+    web: debug
+  file:
+    path: "C:/Jubin/temp/logs"
 
 spring:
   mvc:
@@ -31,4 +34,5 @@ spring:
       hibernate:
         default_schema: public
     database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
 

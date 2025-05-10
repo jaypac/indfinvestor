@@ -30,8 +30,9 @@ public class FileIndexDataSink implements IndexDataSink {
         String filePath = dirPath + File.separator + params.indexName() + ".txt";
 
         try {
-            Files.createDirectories(Paths.get(filePath).getParent());
-            Files.write(Paths.get(filePath), is.readAllBytes(), StandardOpenOption.CREATE_NEW);
+            Path path = Paths.get(filePath);
+            Files.createDirectories(path.getParent());
+            Files.write(path, is.readAllBytes(), StandardOpenOption.CREATE_NEW);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
