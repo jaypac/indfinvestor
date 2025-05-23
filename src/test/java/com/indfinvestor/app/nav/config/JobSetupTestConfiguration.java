@@ -3,6 +3,8 @@ package com.indfinvestor.app.nav.config;
 import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +16,17 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @Import(DataSourceTestConfiguration.class)
-@EnableBatchProcessing(isolationLevelForCreate = "ISOLATION_DEFAULT", transactionManagerRef = "transactionManager")
+@EnableBatchProcessing(isolationLevelForCreate = "ISOLATION_DEFAULT")
 @EnableJpaRepositories(basePackages = {"com.indfinvestor.app.nav.repository"})
 @ComponentScan(basePackages = {"com.indfinvestor.app.nav.service"})
 public class JobSetupTestConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(PlatformTransactionManager.class)
     public JdbcTransactionManager transactionManager(DataSource dataSource) {
         return new JdbcTransactionManager(dataSource);
     }
