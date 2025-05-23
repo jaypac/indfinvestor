@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class IndfinvestorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(IndfinvestorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(IndfinvestorApplication.class, args);
+    }
 
 }

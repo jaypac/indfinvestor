@@ -1,0 +1,38 @@
+app:
+  index:
+    config: classpath:/indexdata/indexMapping.csv
+    sink:
+      file:
+        folderPath: "C:/Jubin/temp/indexdata"
+
+logging:
+  level:
+    org:
+      springframework : info
+      apache:
+        hc:
+          client5:
+            http: trace
+    web: debug
+  file:
+    path: "C:/Jubin/temp/logs"
+
+spring:
+  mvc:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: GET,POST,PUT,DELETE
+      allowed-headers: "*"
+  datasource:
+    url:  jdbc:h2:tcp://localhost/C:/Jubin/dev/data/db/h2/mfnav
+    username: sa
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_schema: public
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+
