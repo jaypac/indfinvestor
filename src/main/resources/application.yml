@@ -1,38 +1,36 @@
 app:
-  index:
-    config: classpath:/indexdata/indexMapping.csv
-    sink:
-      file:
-        folderPath: "C:/Jubin/temp/indexdata"
-
-logging:
-  level:
-    org:
-      springframework : info
-      apache:
-        hc:
-          client5:
-            http: trace
-    web: debug
-  file:
-    path: "C:/Jubin/temp/logs"
+  vendor: postgresql
 
 spring:
-  mvc:
-    cors:
-      allowed-origins: "*"
-      allowed-methods: GET,POST,PUT,DELETE
-      allowed-headers: "*"
+  application:
+    name: app
   datasource:
-    url:  jdbc:h2:tcp://localhost/C:/Jubin/dev/data/db/h2/mfnav
-    username: sa
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/indfinvestor
+    username: finvestor
+    password: finvestor
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      connection-timeout: 90000
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
-        default_schema: public
-    database-platform: org.hibernate.dialect.H2Dialect
-    open-in-view: false
-
+        jdbc:
+          batch_size: 50
+        format_sql: false
+        show_sql: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/${app.vendor}/migration
+  batch:
+    jdbc:
+      initialize-schema: never
+  jdbc:
+    template:
+      fetch-size: 50
