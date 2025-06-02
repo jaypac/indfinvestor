@@ -5,7 +5,7 @@
 
 	<persistence-unit name="test-persistence-unit" transaction-type="RESOURCE_LOCAL">
         <class>com.indfinvestor.app.nav.model.entity.MfFundHouse</class>
-        <class>com.indfinvestor.app.nav.model.entity.MfReturnStats</class>
+        <class>com.indfinvestor.app.nav.model.entity.MfRollingReturnStats</class>
         <class>com.indfinvestor.app.nav.model.entity.MfSchemeDetails</class>
         <class>com.indfinvestor.app.nav.model.entity.MfSchemeNav</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>

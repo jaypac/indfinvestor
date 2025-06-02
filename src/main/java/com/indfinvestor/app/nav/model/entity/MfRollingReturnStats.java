@@ -8,8 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "MF_RETURN_STATS")
-public class MfReturnStats {
+@Table(name = "MF_ROLLING_RETURN_STATS")
+public class MfRollingReturnStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

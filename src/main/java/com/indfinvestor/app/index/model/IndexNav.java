@@ -1,17 +1,18 @@
-package com.indfinvestor.app.nav.model.entity;
+package com.indfinvestor.app.index.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "MF_SCHEME_NAV")
-public class MfSchemeNav {
+@Table(name = "INDEX_NAV")
+public class IndexNav {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,6 @@ public class MfSchemeNav {
     private BigDecimal netAssetValue;
 
     @ManyToOne
-    @JoinColumn(name = "SCHEME_ID", nullable = false)
-    private MfSchemeDetails schemeDetails;
+    @JoinColumn(name = "INDEX_ID", nullable = false)
+    private IndexDetails indexDetails;
 }
