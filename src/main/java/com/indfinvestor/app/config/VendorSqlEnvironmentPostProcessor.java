@@ -13,7 +13,7 @@ public class VendorSqlEnvironmentPostProcessor implements EnvironmentPostProcess
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        String vendor = environment.getProperty("app.vendor"); // or read from env
+        String vendor = environment.getProperty("app.db.vendor");
 
         if (vendor != null) {
             try {
