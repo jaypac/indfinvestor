@@ -27,6 +27,4 @@ public class IndexDetails {
 
     @Column(name = "EXCHANGE", nullable = false)
     private String exchange;
-
-
 }
