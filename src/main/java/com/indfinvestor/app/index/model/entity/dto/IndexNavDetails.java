@@ -1,7 +1,6 @@
 package com.indfinvestor.app.index.model.entity.dto;
 
 import jakarta.validation.constraints.NotBlank;
-
 import java.io.Serializable;
 import java.util.List;
 import lombok.Getter;

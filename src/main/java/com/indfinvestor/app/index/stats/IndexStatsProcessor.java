@@ -6,10 +6,6 @@ import com.indfinvestor.app.index.model.entity.dto.IndexDetailsDto;
 import com.indfinvestor.app.index.model.entity.dto.IndexNavDto;
 import com.indfinvestor.app.index.model.entity.dto.IndexReturnStatsDto;
 import com.indfinvestor.app.index.model.entity.dto.IndexRollingReturns;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemProcessor;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -19,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.ItemProcessor;
 
 @Slf4j
 @RequiredArgsConstructor

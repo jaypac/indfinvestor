@@ -2,6 +2,9 @@ package com.indfinvestor.app.index.stats;
 
 import com.indfinvestor.app.index.model.entity.dto.IndexReturnStatsDto;
 import com.indfinvestor.app.index.model.entity.dto.IndexRollingReturns;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
@@ -9,10 +12,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor

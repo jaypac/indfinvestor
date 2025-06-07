@@ -2,19 +2,16 @@ package com.indfinvestor.app.index.stats;
 
 import com.indfinvestor.app.index.model.entity.dto.IndexDetailsDto;
 import com.indfinvestor.app.index.model.entity.dto.IndexNavDto;
-import com.indfinvestor.app.nav.model.dto.MfSchemeDetailsDto;
-import com.indfinvestor.app.nav.model.dto.MfSchemeNavDto;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @Slf4j
 public class IndexStatsItemReader implements ItemReader<IndexDetailsDto> {
