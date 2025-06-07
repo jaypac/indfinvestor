@@ -1,4 +1,4 @@
-package com.indfinvestor.app.index.model;
+package com.indfinvestor.app.index.model.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -25,6 +25,7 @@ public class IndexNav {
     @Column(name = "NET_ASSET_VALUE", nullable = false)
     private BigDecimal netAssetValue;
 
+    @NaturalId
     @ManyToOne
     @JoinColumn(name = "INDEX_ID", nullable = false)
     private IndexDetails indexDetails;

@@ -25,6 +25,7 @@ public class MfSchemeNav {
     @Column(name = "NET_ASSET_VALUE", nullable = false)
     private BigDecimal netAssetValue;
 
+    @NaturalId
     @ManyToOne
     @JoinColumn(name = "SCHEME_ID", nullable = false)
     private MfSchemeDetails schemeDetails;

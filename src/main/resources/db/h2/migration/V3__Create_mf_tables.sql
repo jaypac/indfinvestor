@@ -61,4 +61,4 @@ ALTER TABLE mf_scheme_nav
     ADD CONSTRAINT FK_MF_SCHEME_NAV_ON_SCHEME FOREIGN KEY (scheme_id) REFERENCES mf_scheme_details (id);
 
 ALTER TABLE mf_scheme_nav
-    ADD CONSTRAINT uc_mf_scheme_nav_nadaneasva UNIQUE (nav_date, net_asset_value);
+    ADD CONSTRAINT uc_mf_scheme_nav_nadaneasvaid UNIQUE (nav_date, net_asset_value, scheme_id);

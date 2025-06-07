@@ -21,7 +21,7 @@ CREATE TABLE index_nav
 );
 
 ALTER TABLE index_nav
-    ADD CONSTRAINT uc_index_nav_nadaneasva UNIQUE (nav_date, net_asset_value);
+    ADD CONSTRAINT uc_index_nav_nadaneasvaid UNIQUE (nav_date, net_asset_value, index_id);
 
 ALTER TABLE index_nav
     ADD CONSTRAINT FK_INDEX_NAV_ON_INDEX FOREIGN KEY (index_id) REFERENCES index_details (id);

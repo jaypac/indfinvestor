@@ -1,4 +1,4 @@
-package com.indfinvestor.app.index.model;
+package com.indfinvestor.app.index.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

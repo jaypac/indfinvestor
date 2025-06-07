@@ -1,9 +1,7 @@
-package com.indfinvestor.app.nav.amfi.bulkload;
+package com.indfinvestor.app.index.nse.bulkload;
 
-import com.indfinvestor.app.nav.model.dto.MfNavDetails;
-import com.indfinvestor.app.nav.service.MfFundHouseService;
-import com.indfinvestor.app.nav.service.MfSchemeDetailsService;
-import java.nio.charset.StandardCharsets;
+import com.indfinvestor.app.index.model.entity.dto.IndexNavDetails;
+import com.indfinvestor.app.index.service.IndexDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -25,56 +23,54 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 
 @Slf4j
 @Configuration
-public class AmfiBulkFileNavTransformerJobConfig {
+public class NseBulkFileNavTransformerJobConfig {
 
-    @Bean(name = "amfiFilePartitioner")
+    @Bean(name = "nseFilePartitioner")
     @StepScope
-    public Partitioner getPartitioner(final @Value("#{jobParameters['filePath']}") String inputPath) {
-        return new AmfiFilePartitioner(inputPath);
+    public Partitioner getPartitioner(final @Value("#{jobParameters['inputPath']}") String inputPath) {
+        return new NseFilePartitioner(inputPath);
     }
 
-    @Bean(name = "amfiFileItemReader")
+    @Bean(name = "nseCsvItemReader")
     @StepScope
-    public ItemReader<MfNavDetails> itemReader(final @Value("#{stepExecutionContext['fileName']}") String fileName) {
-        log.info("Reading file {}", fileName);
-        return new AmfiFileItemReader("itemReader", fileName, StandardCharsets.UTF_8);
+    public ItemReader<IndexNavDetails> csvItemReader(@Value("#{stepExecutionContext[fileName]}") String filename) {
+        return new NseCsvItemReader(filename);
     }
 
-    @Bean(name = "amfiFileItemProcessor")
+    @Bean(name = "nseFileItemProcessor")
     @StepScope
-    public AmfiFileItemProcessor itemProcessor() {
-        return new AmfiFileItemProcessor();
+    public NseFileItemProcessor itemProcessor() {
+        return new NseFileItemProcessor();
     }
 
-    @Bean(name = "amfiItemValidator")
-    public BeanValidatingItemProcessor<MfNavDetails> itemValidator() throws Exception {
-        BeanValidatingItemProcessor<MfNavDetails> validator = new BeanValidatingItemProcessor<>();
+    @Bean(name = "nseItemValidator")
+    public BeanValidatingItemProcessor<IndexNavDetails> itemValidator() throws Exception {
+        BeanValidatingItemProcessor<IndexNavDetails> validator = new BeanValidatingItemProcessor<>();
         validator.setFilter(true);
         validator.afterPropertiesSet();
         return validator;
     }
 
-    @Bean(name = "amfiFileItemWriter")
+    @Bean(name = "nseFileItemWriter")
     @StepScope
-    public AmfiFileItemWriter getItemWriter(
-            final MfFundHouseService fundHouseService,
-            final MfSchemeDetailsService mfSchemeDetailsService,
+    public NseFileItemWriter getItemWriter(
+            final IndexDetailsService indexDetailsService,
             final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        return new AmfiFileItemWriter(fundHouseService, mfSchemeDetailsService, namedParameterJdbcTemplate);
+        return new NseFileItemWriter(indexDetailsService, namedParameterJdbcTemplate);
     }
 
-    @Bean(name = "amfiBulkFileNavTransformerJob")
+    @Bean(name = "nseBulkFileNavTransformerJob")
     public Job job(
             final JobRepository jobRepository,
             final JdbcTransactionManager jdbcTransactionManager,
-            final @Qualifier("amfiFileItemReader") ItemReader<MfNavDetails> itemReader,
-            final @Qualifier("amfiFileItemProcessor") ItemProcessor<MfNavDetails, MfNavDetails> itemProcessor,
-            final @Qualifier("amfiFileItemWriter") ItemWriter<MfNavDetails> itemWriter,
-            final @Qualifier("amfiFilePartitioner") Partitioner partitioner)
+            final @Qualifier("nseCsvItemReader") ItemReader<IndexNavDetails> itemReader,
+            final @Qualifier("nseFileItemProcessor") ItemProcessor<IndexNavDetails, IndexNavDetails> itemProcessor,
+            final @Qualifier("nseFileItemWriter") ItemWriter<IndexNavDetails> itemWriter,
+            final @Qualifier("nseFilePartitioner") Partitioner partitioner)
             throws Exception {
 
         var step1 = new StepBuilder("step1", jobRepository)
-                .<MfNavDetails, MfNavDetails>chunk(5, jdbcTransactionManager)
+                .<IndexNavDetails, IndexNavDetails>chunk(5, jdbcTransactionManager)
                 .reader(itemReader)
                 .processor(itemValidator())
                 .processor(itemProcessor)
@@ -88,7 +84,7 @@ public class AmfiBulkFileNavTransformerJobConfig {
                 .taskExecutor(new VirtualThreadTaskExecutor())
                 .build();
 
-        return new JobBuilder("amfiBulkNavTransformerJob", jobRepository)
+        return new JobBuilder("nseBulkNavTransformerJob", jobRepository)
                 .start(partitionStep)
                 .build();
     }
