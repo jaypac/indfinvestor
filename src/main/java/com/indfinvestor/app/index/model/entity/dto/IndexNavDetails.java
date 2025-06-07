@@ -1,13 +1,15 @@
 package com.indfinvestor.app.index.model.entity.dto;
 
 import jakarta.validation.constraints.NotBlank;
+
+import java.io.Serializable;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class IndexNavDetails {
+public class IndexNavDetails implements Serializable {
     @NotBlank private String indexName;
 
     private List<IndexCsvData> historicalNavData;
