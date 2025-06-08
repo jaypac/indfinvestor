@@ -1,7 +1,7 @@
 package com.indfinvestor.app.index.nse.bulkload;
 
-import com.indfinvestor.app.index.model.entity.dto.IndexCsvData;
-import com.indfinvestor.app.index.model.entity.dto.IndexNavDetails;
+import com.indfinvestor.app.index.model.dto.IndexCsvData;
+import com.indfinvestor.app.index.model.dto.IndexNavDetails;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;

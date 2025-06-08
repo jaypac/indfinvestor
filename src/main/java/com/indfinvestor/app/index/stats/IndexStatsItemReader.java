@@ -1,7 +1,7 @@
 package com.indfinvestor.app.index.stats;
 
-import com.indfinvestor.app.index.model.entity.dto.IndexDetailsDto;
-import com.indfinvestor.app.index.model.entity.dto.IndexNavDto;
+import com.indfinvestor.app.index.model.dto.IndexDetailsDto;
+import com.indfinvestor.app.index.model.dto.IndexNavDto;
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDate;

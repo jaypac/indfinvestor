@@ -1,6 +1,6 @@
 package com.indfinvestor.app.index.stats;
 
-import com.indfinvestor.app.index.model.entity.dto.IndexDetailsDto;
+import com.indfinvestor.app.index.model.dto.IndexDetailsDto;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

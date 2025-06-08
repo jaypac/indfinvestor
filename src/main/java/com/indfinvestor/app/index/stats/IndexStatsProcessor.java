@@ -2,10 +2,10 @@ package com.indfinvestor.app.index.stats;
 
 import com.google.common.math.Quantiles;
 import com.google.common.math.StatsAccumulator;
-import com.indfinvestor.app.index.model.entity.dto.IndexDetailsDto;
-import com.indfinvestor.app.index.model.entity.dto.IndexNavDto;
-import com.indfinvestor.app.index.model.entity.dto.IndexReturnStatsDto;
-import com.indfinvestor.app.index.model.entity.dto.IndexRollingReturns;
+import com.indfinvestor.app.index.model.dto.IndexDetailsDto;
+import com.indfinvestor.app.index.model.dto.IndexNavDto;
+import com.indfinvestor.app.index.model.dto.IndexReturnStatsDto;
+import com.indfinvestor.app.index.model.dto.IndexRollingReturns;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;

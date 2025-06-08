@@ -1,7 +1,7 @@
 package com.indfinvestor.app.index.nse.bulkload;
 
+import com.indfinvestor.app.index.model.dto.IndexNavDetails;
 import com.indfinvestor.app.index.model.entity.IndexDetails;
-import com.indfinvestor.app.index.model.entity.dto.IndexNavDetails;
 import com.indfinvestor.app.index.service.IndexDetailsService;
 import java.sql.Types;
 import java.util.ArrayList;

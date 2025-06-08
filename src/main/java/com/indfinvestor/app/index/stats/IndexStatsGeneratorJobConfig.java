@@ -1,7 +1,7 @@
 package com.indfinvestor.app.index.stats;
 
-import com.indfinvestor.app.index.model.entity.dto.IndexDetailsDto;
-import com.indfinvestor.app.index.model.entity.dto.IndexRollingReturns;
+import com.indfinvestor.app.index.model.dto.IndexDetailsDto;
+import com.indfinvestor.app.index.model.dto.IndexRollingReturns;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.annotation.StepScope;

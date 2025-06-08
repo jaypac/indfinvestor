@@ -1,7 +1,7 @@
 package com.indfinvestor.app.index.stats;
 
-import com.indfinvestor.app.index.model.entity.dto.IndexReturnStatsDto;
-import com.indfinvestor.app.index.model.entity.dto.IndexRollingReturns;
+import com.indfinvestor.app.index.model.dto.IndexReturnStatsDto;
+import com.indfinvestor.app.index.model.dto.IndexRollingReturns;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;

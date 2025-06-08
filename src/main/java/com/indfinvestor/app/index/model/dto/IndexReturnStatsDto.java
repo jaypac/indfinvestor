@@ -1,4 +1,4 @@
-package com.indfinvestor.app.index.model.entity.dto;
+package com.indfinvestor.app.index.model.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
