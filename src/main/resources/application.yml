@@ -4,11 +4,11 @@ app:
 
 spring:
   application:
-    name: app
+    name: indfinvestor
   datasource:
     url: jdbc:postgresql://localhost:5432/indfinvestor
     username: finvestor
-    password: finvestor
+    password:
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 50
@@ -18,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     properties:
       hibernate:
         jdbc:

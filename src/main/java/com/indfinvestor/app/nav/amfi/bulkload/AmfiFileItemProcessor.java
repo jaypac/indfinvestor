@@ -27,13 +27,27 @@ public class AmfiFileItemProcessor implements ItemProcessor<MfNavDetails, MfNavD
         item.getHistoricalNavData().forEach((key, value) -> {
             Map<LocalDate, MfNavRecord> navHistory =
                     value.stream().collect(Collectors.toMap(MfNavRecord::getDate, Function.identity()));
+            List<LocalDate> navHistoricalDates =
+                    value.stream().map(MfNavRecord::getDate).collect(Collectors.toList());
 
-            List<MfNavRecord> navRecords = populateMissingDates(navHistory, value);
-            historicalNavData.put(key, navRecords);
+            var isApplicable = filter(navHistoricalDates);
+            if (isApplicable) {
+                List<MfNavRecord> navRecords = populateMissingDates(navHistory, value);
+                historicalNavData.put(key, navRecords);
+            } else {
+                log.info("Skipping records for scheme {} ", key.schemeName());
+            }
         });
 
         newMfNavDetails.setHistoricalNavData(historicalNavData);
         return newMfNavDetails;
+    }
+
+    private boolean filter(List<LocalDate> navHistory) {
+
+        var currentYear = LocalDate.now().getYear();
+        var lastYear = navHistory.getLast().getYear();
+        return currentYear - lastYear <= 1;
     }
 
     private List<MfNavRecord> populateMissingDates(Map<LocalDate, MfNavRecord> navHistory, List<MfNavRecord> value) {

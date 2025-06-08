@@ -115,6 +115,6 @@ public class AmfiFileItemReader implements ItemReader<MfNavDetails> {
 
         mfNavDetails.setHistoricalNavData(result);
         noInput = true;
-        return mfNavDetails;
+        return mfNavDetails.getHistoricalNavData().isEmpty() ? null : mfNavDetails;
     }
 }
